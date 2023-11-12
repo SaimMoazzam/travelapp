@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hotels', function (Blueprint $table) {
+        Schema::create('tours', function (Blueprint $table) {
             // $table->id();
             $table->uuid('id')->primary();
             $table->string('name');
-            $table->string('location');
-            $table->string('rating')->nullable();
-            $table->string('amount')->nullable();
+            $table->float('amount', 8, 2);
+            $table->longText('description')->nullable();
+            $table->string('category');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hotels');
+        Schema::dropIfExists('tours');
     }
 };

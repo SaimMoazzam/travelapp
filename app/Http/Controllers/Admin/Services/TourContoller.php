@@ -13,54 +13,61 @@ class TourContoller extends Controller
      */
     public function index()
     {
-        //
+        $data=[];
+        $data['tablename'] = 'tour';
+        $data['tablename_plural'] = 'tours';
+        $data['tours'] = Tours::orderBy('name', 'ASC')->get();
+        $data['tours_json'] = json_encode($data['tours']);
+        return view('admin.services.tour.list')->with($data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function store(Request $request){
+        // dd($request);
+        
+        // $newHotel = new Hotels;
+        // $newHotel->name = $request->name;
+        // $newHotel->location = $request->location;
+
+        // $newHotel->save();
+
+        // return redirect()->route('admin.list.hotel');  
+        
+        $tourID = $request->id;
+  
+        $tourrow   =   Tours::updateOrCreate(
+                    [
+                     'id' => $tourID
+                    ],
+                    [
+                    'name' => $request->name, 
+                    'category' => $request->category,
+                    'amount' => $request->amount,
+                    'description' => $request->description,
+                    ]);    
+                          
+        return Response()->json($tourrow);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function edit(Request $request){
+        $editTour = Tours::find($request->id);
+       
+        return Response()->json($editTour);
+    }
+    
+    public function update(Request $request){
+        $updateTour = Tours::find($request->id);
+        $updateTour->name= $request->name;
+        $updateTour->category= $request->category;
+        $updateTour->amount= $request->amount;
+        $updateTour->description= $request->description;
+        $updateTour->save();
+        return Response()->json($updateTour);
+        
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Tours $tours)
-    {
-        //
-    }
+    public function delete(Request $request){
+        $deletedTour = Tours::find($request->id)->delete();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Tours $tours)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Tours $tours)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Tours $tours)
-    {
-        //
+        return Response()->json($deletedTour);
     }
 }

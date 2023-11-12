@@ -9,9 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hotels extends Model
 {
-    use HasUuids;
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, HasUuids, SoftDeletes;
     
     protected $fillable = ['name','location'];
 }

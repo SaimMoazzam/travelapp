@@ -13,23 +13,39 @@ Dashboard
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-capitalize" id="modalTitle">Hotel</h5>
+                <h5 class="modal-title text-capitalize" id="modalTitle">Tour</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="javascript:void(0)" id="{{$tablename}}Form" name="{{$tablename}}Form" class="row form-horizontal" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="mode" id="{{$tablename}}_form_mode">
                     <input type="hidden" name="id" id="{{$tablename}}_form_id">
-                    <div class="col-md-6 form-group">
+                    <div class="form-group">
                         <label for="name" class="col-sm-2 control-label">Name</label>
                             <div class="col-sm-12">
                             <input type="text" class="form-control" id="{{$tablename}}_form_name" name="name" placeholder="Enter Name" maxlength="255" required>
                         </div>
                     </div>  
-                    <div class="col-md-6 form-group">
-                        <label for="name" class="col-sm-2 control-label">Location</label>
+                    <div class="col-md-6 form-group pt-4">
+                        <label for="name" class="col-sm-2 control-label">Category</label>
                             <div class="col-sm-12">
-                            <input type="text" class="form-control" id="{{$tablename}}_form_location" name="location" placeholder="Enter Location" maxlength="255" required>
+                            <select type="text" class="form-control" id="{{$tablename}}_form_category" name="category" placeholder="Enter Categpry" required>
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 form-group pt-4">
+                        <label for="name" class="col-sm-2 control-label">Amount</label>
+                            <div class="col-sm-12">
+                            <input type="text" class="form-control" id="{{$tablename}}_form_amount" name="amount" placeholder="Enter Amount" maxlength="255" required>
+                        </div>
+                    </div>
+                    <div class="form-group pt-4">
+                        <label for="name" class="col-sm-2 control-label">Description</label>
+                            <div class="col-sm-12">
+                            <textarea class="form-control" id="{{$tablename}}_form_description" name="description" placeholder="Enter Description" required></textarea>
                         </div>
                     </div>
                     <div class="col-sm-offset-2 col-sm-10"><br/>
@@ -61,10 +77,10 @@ Dashboard
                           <h6 class="fw-semibold mb-0">Name</h6>
                         </th>
                         <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Location</h6>
+                          <h6 class="fw-semibold mb-0">Category</h6>
                         </th>
                         <th class="border-bottom-0">
-                          <h6 class="fw-semibold mb-0">Rating</h6>
+                          <h6 class="fw-semibold mb-0">Amount</h6>
                         </th>
                         <th class="border-bottom-0">
                           <h6 class="fw-semibold mb-0">Actions</h6>
@@ -78,23 +94,23 @@ Dashboard
                       </tr>
                     </thead>
                     <tbody>
-                        @foreach($hotels as $key => $hotel)  
-                        <tr id="{{$tablename}}row_{{$hotel->id}}">
+                        @foreach($tours as $key => $tour)  
+                        <tr id="{{$tablename}}row_{{$tour->id}}">
                             <!-- <td class="border-bottom-0">
                                 <p class="mb-0 fw-normal">{{$key+1}}</p>
                             </td> -->
                             <td class="border-bottom-0">
-                                <h6 class="fw-semibold mb-1" id="column_{{$hotel->id}}_name">{{$hotel->name}}</h6>
+                                <h6 class="fw-semibold mb-1" id="column_{{$tour->id}}_name">{{$tour->name}}</h6>
                             </td>
                             <td class="border-bottom-0">
-                                <p class="mb-0 fw-normal" id="column_{{$hotel->id}}_location">{{$hotel->location}}</p>
+                                <p class="mb-0 fw-normal" id="column_{{$tour->id}}_category">{{$tour->category}}</p>
                             </td>
                             <td class="border-bottom-0">
-                                <p class="mb-0 fw-normal" id="column_{{$hotel->id}}_rating">{{$hotel->rating}}</p>
+                                <p class="mb-0 fw-normal" id="column_{{$tour->id}}_amount">{{$tour->amount}}</p>
                             </td>
                             <td class="border-bottom-0" colspan="2">
-                                <button id="edit_{{$hotel->id}}" class="btn btn-primary" onclick="editHotel('{{$hotel->id}}')" class="mb-0 fw-normal">Edit</button>
-                                <button id="delete_{{$hotel->id}}" class="btn btn-danger"  onclick="deleteHotel('{{$hotel->id}}')" class="mb-0 fw-normal">Delete</button>
+                                <button id="edit_{{$tour->id}}" class="btn btn-primary" onclick="editTour('{{$tour->id}}')" class="mb-0 fw-normal">Edit</button>
+                                <button id="delete_{{$tour->id}}" class="btn btn-danger"  onclick="deleteTour('{{$tour->id}}')" class="mb-0 fw-normal">Delete</button>
                             </td>
                         </tr> 
                         @endforeach                      
@@ -129,10 +145,10 @@ function add(){
     $('#{{$tablename}}_form_mode').val('new');
 }   
      
-function editHotel(id){
+function editTour(id){
     $.ajax({
         type:"POST",
-        url: "{{ route('edit.hotel') }}",
+        url: "{{ route('edit.tour') }}",
         data: { id },
         dataType: 'json',
         success: function(res){
@@ -142,18 +158,20 @@ function editHotel(id){
             $('#{{$tablename}}_form_mode').val('edit');
             $('#{{$tablename}}_form_id').val(res.id);
             $('#{{$tablename}}_form_name').val(res.name);
-            $('#{{$tablename}}_form_location').val(res.location);
+            $('#{{$tablename}}_form_amount').val(res.amount);
+            $('#{{$tablename}}_form_description').val(res.description);
+            $('#{{$tablename}}_form_category').val(res.category);
         }
     });
 }  
  
-function deleteHotel(id){
+function deleteTour(id){
     if (confirm("Delete Record?")) {
         var id = id;
         // ajax
         $.ajax({
             type:"POST",
-            url: "{{ route('delete.hotel') }}",
+            url: "{{ route('delete.tour') }}",
             data: { id },
             dataType: 'json',
             success: function(res){
@@ -170,14 +188,14 @@ const createTableRow = (data) => {
                             <h6 class="fw-semibold mb-1" id="column_${data.id}_name">${data.name}</h6>
                         </td>
                         <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal" id="column_${data.id}_location">${data.location}</p>
+                            <p class="mb-0 fw-normal" id="column_${data.id}_category">${data.category}</p>
                         </td>
                         <td class="border-bottom-0">
-                            <p class="mb-0 fw-normal" id="column_${data.id}_rating">${(data.rating == null) ? '' : data.rating}</p>
+                            <p class="mb-0 fw-normal" id="column_${data.id}_amount">${(data.amount == null) ? '' : data.amount}</p>
                         </td>
                         <td class="border-bottom-0" colspan="2">
-                            <button class="btn btn-primary" onclick="editHotel('${data.id}')" class="mb-0 fw-normal">Edit</button>
-                            <button class="btn btn-danger"  onclick="deleteHotel('${data.id}')" class="mb-0 fw-normal">Delete</button>
+                            <button class="btn btn-primary" onclick="editTour('${data.id}')" class="mb-0 fw-normal">Edit</button>
+                            <button class="btn btn-danger"  onclick="deleteTour('${data.id}')" class="mb-0 fw-normal">Delete</button>
                         </td>
                     </tr> `;
     $('#{{$tablename_plural}}_table tbody').append(rowHTML);
@@ -185,8 +203,8 @@ const createTableRow = (data) => {
 
 const updateTableRow = (data) => {
     document.getElementById(`column_${data.id}_name`).innerHTML = data.name;
-    document.getElementById(`column_${data.id}_location`).innerHTML = data.location;
-    document.getElementById(`column_${data.id}_rating`).innerHTML = data.rating;
+    document.getElementById(`column_${data.id}_category`).innerHTML = data.category;
+    document.getElementById(`column_${data.id}_amount`).innerHTML = data.amount;
 }
 
 $('#{{$tablename}}Form').submit(function(e) {
@@ -195,7 +213,7 @@ $('#{{$tablename}}Form').submit(function(e) {
     var formData = new FormData(this);
     $.ajax({
         type:'POST',
-        url: "{{ route('save.hotel') }}",
+        url: "{{ route('save.tour') }}",
         data: formData,
         cache:false,
         contentType: false,

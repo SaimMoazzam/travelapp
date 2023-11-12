@@ -37,7 +37,7 @@
           <span class="hide-menu">Hotel</span>
         </a>
       </li>
-      <li class="sidebar-item">
+      <li class="sidebar-item" hidden>
         <a class="sidebar-link" href="Cab" aria-expanded="false">
           <span>
             <!-- <i class="ti ti-layout-dashboard"></i> -->
@@ -46,14 +46,14 @@
         </a>
       </li>
       <li class="sidebar-item">
-        <a class="sidebar-link" href="Tour" aria-expanded="false">
+        <a class="sidebar-link" href="{{route('admin.tours')}}" aria-expanded="false">
           <span>
             <!-- <i class="ti ti-layout-dashboard"></i> -->
           </span>
           <span class="hide-menu">Tour</span>
         </a>
       </li>
-      <li class="sidebar-item">
+      <li class="sidebar-item" hidden>
         <a class="sidebar-link" href="Rental" aria-expanded="false">
           <span>
             <!-- <i class="ti ti-layout-dashboard"></i> -->

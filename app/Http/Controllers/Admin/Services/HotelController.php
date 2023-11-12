@@ -17,8 +17,9 @@ class HotelController extends Controller
 
     public function index() {
         $data=[];
-        $data['heading'] = 'Hotels';
-        $data['hotels'] = Hotels::all();
+        $data['tablename'] = 'hotel';
+        $data['tablename_plural'] = 'hotels';
+        $data['hotels'] = Hotels::orderBy('name', 'ASC')->get();
         $data['hotels_json'] = json_encode($data['hotels']);
         return view('admin.services.hotel.list')->with($data);
     }
@@ -52,13 +53,13 @@ class HotelController extends Controller
         return Response()->json($hotelrow);
     }
 
-    public function editHotel(Request $request){
+    public function edit(Request $request){
         $editHotel = Hotels::find($request->id);
        
         return Response()->json($editHotel);
     }
     
-    public function updateHotel(Request $request){
+    public function update(Request $request){
         $updateHotel = Hotels::find($request->id);
         $updateHotel->name= $request->name;
         $updateHotel->location= $request->location;
@@ -67,7 +68,7 @@ class HotelController extends Controller
         
     }
 
-    public function deleteHotel(Request $request){
+    public function delete(Request $request){
         $deletedHotel = Hotels::find($request->id)->delete();
 
         return Response()->json($deletedHotel);
